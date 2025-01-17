@@ -16,8 +16,28 @@ export default {
 			},
 		});
 
-		const body: { topic: string } = await request.json();
-		const topic = body.topic;
+		let body: { topic: string } | null = null;
+
+		try {
+			body = await request.json();
+		} catch (e) {
+			return new Response(JSON.stringify({ error: true, message: 'Invalid or missing JSON body!' }), {
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				status: 400,
+			});
+		}
+		if (!body || !body.topic?.trim()?.length) {
+			return new Response(JSON.stringify({ error: true, message: 'Provide a topic to generate the quiz on!' }), {
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				status: 400,
+			});
+		}
+
+		const topic = body.topic.trim();
 
 		const prompt = `
             Create a JSON array containing 10 multiple-choice quiz questions on the topic "${topic}". Each question should adhere to the following structure:
