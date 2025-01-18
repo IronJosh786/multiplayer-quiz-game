@@ -14,9 +14,32 @@ export default {
 			generationConfig: {
 				responseMimeType: 'application/json',
 			},
+			systemInstruction: `
+				You are a specialized quiz generating AI. Your task is to create 10 multiple-choice quiz questions based on the provided topic.
+				User will also provide the difficulty level, so generate questions based on that difficulty level.
+				You will always generate an array of 10 such objects:
+				{
+					"question_number": 1,
+					"text": "What is the output of typeof null in JavaScript?",
+					"options": {
+						"A": "object",
+						"B": "null",
+						"C": "undefined",
+						"D": "string"
+					},
+					"answer": "A"
+				}
+				Guidelines:
+				1. If the topic is inappropriate or insufficient for generating a quiz, respond with:
+				   "Could not generate the quiz. Provide a different topic for generating the quiz!"
+				2. Ensure all questions are clear, relevant to the topic, and contain four distinct answer options.
+				3. Do not generate any content in the form of images or audio.
+				4. Provide varied and unique questions to ensure diversity in the quiz.
+				5. The output must be strictly in JSON format with each question adhering to the defined structure.
+			`,
 		});
 
-		let body: { topic: string } | null = null;
+		let body: { topic: string; difficulty?: 'Easy' | 'Medium' | 'Hard' } | null = null;
 
 		try {
 			body = await request.json();
@@ -38,34 +61,24 @@ export default {
 		}
 
 		const topic = body.topic.trim();
-
-		const prompt = `
-            Create a JSON array containing 10 multiple-choice quiz questions on the topic "${topic}". Each question should adhere to the following structure:
-            {
-                "question_number": 1,
-                "text": "What is the output of typeof null in JavaScript?",
-                "options": {
-                    "A": "object",
-                    "B": "null",
-                    "C": "undefined",
-                    "D": "string"
-                },
-                "answer": "A"
-            }
-            Ensure each question includes:
-            1. A unique question number.
-            2. A clearly stated question in the "text" field.
-            3. Four distinct answer options labeled "A", "B", "C", and "D".
-            4. The correct answer indicated in the "answer" field using the corresponding letter.
-            5. Make sure to NEVER GENERATE IMAGES even if it is given in the prompt above.
-
-            Return the output as an array of such question objects.
-        `;
+		const difficulty = body.difficulty || 'Easy';
 
 		try {
-			const result = await model.generateContent(prompt);
-			const data = JSON.parse(result.response.text());
-			return new Response(JSON.stringify(data), {
+			const result = await model.generateContent({
+				contents: [
+					{
+						role: 'user',
+						parts: [{ text: `topic: ${topic}, difficulty: ${difficulty}` }],
+					},
+				],
+				generationConfig: {
+					temperature: 1.2,
+					topP: 1.0,
+				},
+			});
+			const rawData = result.response.text();
+			const cleanData = rawData.replace(/^```json|```/g, '').trim();
+			return new Response(cleanData, {
 				headers: {
 					'Content-Type': 'application/json',
 				},
