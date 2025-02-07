@@ -8,11 +8,16 @@ import { createTokens, verifyToken } from "../utils/jwt";
 
 type User = {
   id: string;
-  email: string;
+  username: string;
 };
 
 const authSchema = z.object({
-  email: z.string().trim().email({ message: "Enter a valid email" }),
+  username: z
+    .string()
+    .trim()
+    .toLowerCase()
+    .min(4, { message: "Username must be of at least 4 characters." })
+    .max(8, { message: "Username can be of atmost 8 characters." }),
   password: z.string().trim().min(8, {
     message: "Password must be of at least 8 characters.",
   }),
@@ -47,24 +52,24 @@ export const signUp = asyncHandler(async (req: Request, res: Response) => {
     if (!success) {
       return res.status(400).json({ message: error.errors[0].message });
     }
-    let { email, password } = data;
+    let { username, password } = data;
 
-    const userExists = await db.user.findUnique({ where: { email } });
+    const userExists = await db.user.findUnique({ where: { username } });
 
     if (userExists) {
-      return res.status(400).json({ message: "Email already taken!" });
+      return res.status(400).json({ message: "Username already taken!" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = await db.user.create({
       data: {
-        email: email,
+        username: username,
         password: hashedPassword,
       },
     });
 
-    const { accessToken, refreshToken } = createTokens(newUser.id, email);
+    const { accessToken, refreshToken } = createTokens(newUser.id, username);
 
     await db.user.update({
       where: { id: newUser.id },
@@ -76,7 +81,7 @@ export const signUp = asyncHandler(async (req: Request, res: Response) => {
 
     return res
       .status(201)
-      .json({ data: { email }, message: "Sign Up successful" });
+      .json({ data: { username }, message: "Sign Up successful" });
   } catch (error) {
     console.log("Error in signUp ", error);
     return res
@@ -91,9 +96,9 @@ export const signIn = asyncHandler(async (req: Request, res: Response) => {
     if (!success) {
       return res.status(400).json({ message: error.errors[0].message });
     }
-    let { email, password } = data;
+    let { username, password } = data;
 
-    const user = await db.user.findUnique({ where: { email } });
+    const user = await db.user.findUnique({ where: { username } });
 
     if (!user) {
       return res.status(404).json({ message: "User not found!" });
@@ -105,7 +110,7 @@ export const signIn = asyncHandler(async (req: Request, res: Response) => {
       return res.status(400).json({ message: "Incorrect Password!" });
     }
 
-    const { accessToken, refreshToken } = createTokens(user.id, email);
+    const { accessToken, refreshToken } = createTokens(user.id, username);
 
     await db.user.update({
       where: { id: user.id },
@@ -117,7 +122,7 @@ export const signIn = asyncHandler(async (req: Request, res: Response) => {
 
     return res
       .status(200)
-      .json({ data: { email }, message: "Sign In successful" });
+      .json({ data: { username }, message: "Sign In successful" });
   } catch (error) {
     console.log("Error in signIn ", error);
     return res
@@ -153,7 +158,10 @@ export const refreshToken = asyncHandler(
         return res.status(400).json({ message: "Login required!" });
       }
 
-      const { accessToken, refreshToken } = createTokens(user.id, user.email);
+      const { accessToken, refreshToken } = createTokens(
+        user.id,
+        user.username
+      );
 
       await db.user.update({
         where: { id: user.id },

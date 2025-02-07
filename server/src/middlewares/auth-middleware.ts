@@ -17,7 +17,7 @@ export const jwtStrategy = new JwtStrategy(opts, async (payload, done) => {
       where: { id: payload.userId },
       select: {
         id: true,
-        email: true,
+        username: true,
       },
     });
     if (user) {

@@ -31,7 +31,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const authSchema = z.object({
-  email: z.string().email({ message: "Enter a valid email" }),
+  username: z
+    .string()
+    .trim()
+    .min(4, { message: "Username must be of at least 4 characters." })
+    .max(8, { message: "Username can be of atmost 8 characters." }),
   password: z.string().trim().min(8, {
     message: "Password must be of at least 8 characters.",
   }),
@@ -47,7 +51,7 @@ export function AuthForm() {
   const form = useForm<z.infer<typeof authSchema>>({
     resolver: zodResolver(authSchema),
     defaultValues: {
-      email: "",
+      username: "",
       password: "",
     },
   });
@@ -90,7 +94,7 @@ export function AuthForm() {
           <CardDescription>
             {page === "signin"
               ? "Enter your credentials to sign in to your account"
-              : "Enter email and password to create a new account"}
+              : "Enter username and password to create a new account"}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -101,12 +105,19 @@ export function AuthForm() {
             >
               <FormField
                 control={form.control}
-                name="email"
+                name="username"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel>Username</FormLabel>
                     <FormControl>
-                      <Input placeholder="abc@abc.com" {...field} />
+                      <Input
+                        {...field}
+                        placeholder="john"
+                        onChange={(e) =>
+                          field.onChange(e.target.value.toLowerCase())
+                        }
+                        value={field.value}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
