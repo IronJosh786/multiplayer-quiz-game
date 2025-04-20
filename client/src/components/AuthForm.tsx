@@ -20,12 +20,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { toast } from "sonner";
-import { UseAuth } from "./AuthProvider";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
+import { Lead, Muted } from "./ui/typography";
 import { Button } from "@/components/ui/button";
 import { authenticate } from "@/lib/get-add-data";
+import { UseAuth } from "../provider/AuthProvider";
 import { useMutation } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -62,9 +63,9 @@ export function AuthForm() {
 
   useEffect(() => {
     if (loading) return;
-    if (isLoggedIn) navigate("/");
+    if (!loading && isLoggedIn) navigate("/home");
     setPage(location.pathname.slice(1));
-  }, [location.pathname, loading]);
+  }, [location.pathname, loading, isLoggedIn]);
 
   const mutation = useMutation({
     mutationFn: authenticate,
@@ -75,26 +76,26 @@ export function AuthForm() {
       toast.dismiss();
       showErrorToast(error);
     },
-    onSuccess: () => {
-      login();
+    onSuccess: (data) => {
+      login(data.data.username);
       toast.dismiss();
-      const previousPath = location?.state?.from?.pathname || "/";
+      const previousPath = location?.state?.from?.pathname || "/home";
       navigate(previousPath, { replace: true });
       showSuccessToast("Logged In");
     },
   });
 
   return (
-    <div className="min-h-dvh flex justify-center items-center px-4">
+    <div className="flex-1 flex justify-center items-center px-4">
       <Card className="mx-auto w-96">
         <CardHeader>
-          <CardTitle className="text-2xl">
-            {page === "signin" ? "Sign In" : "Sign Up"}
+          <CardTitle>
+            <Lead>{page === "signin" ? "Sign In" : "Sign Up"}</Lead>
           </CardTitle>
           <CardDescription>
             {page === "signin"
               ? "Enter your credentials to sign in to your account"
-              : "Enter username and password to create a new account"}
+              : "Fill up the form to create a new account"}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -145,21 +146,19 @@ export function AuthForm() {
               </Button>
             </form>
           </Form>
-          {page === "signin" ? (
-            <div className="mt-4 text-center text-sm">
-              Don&apos;t have an account?{" "}
-              <Link to={"/signup"} className="underline">
-                Sign Up
+          <div className="mt-4 text-center">
+            <Muted>
+              {page === "signin"
+                ? "Don't have an account? "
+                : "Already have an account? "}
+              <Link
+                to={page === "signin" ? "/signup" : "/signin"}
+                className="underline"
+              >
+                {page === "signin" ? "Sign Up" : "Sign In"}
               </Link>
-            </div>
-          ) : (
-            <div className="mt-4 text-center text-sm">
-              Already have an account?{" "}
-              <Link to={"/signin"} className="underline">
-                Sign In
-              </Link>
-            </div>
-          )}
+            </Muted>
+          </div>
         </CardContent>
       </Card>
     </div>

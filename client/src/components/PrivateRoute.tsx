@@ -1,6 +1,6 @@
 import Loader from "./Loader";
 import { useEffect } from "react";
-import { UseAuth } from "./AuthProvider";
+import { UseAuth } from "../provider/AuthProvider";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 
 const PrivateRoute = () => {

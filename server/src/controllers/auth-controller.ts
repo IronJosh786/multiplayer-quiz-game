@@ -171,7 +171,10 @@ export const refreshToken = asyncHandler(
       setCookie(res, "access_token", accessToken, accessTokenCookieExpiry);
       setCookie(res, "refresh_token", refreshToken, refreshTokenCookieExpiry);
 
-      return res.status(200).json({ message: "Token refresh successful" });
+      return res.status(200).json({
+        data: { username: user.username },
+        message: "Token refresh successful",
+      });
     } catch (error) {
       console.log("Error in refreshToken ", error);
       return res.status(500).json({ message: "Could not Refresh Token." });

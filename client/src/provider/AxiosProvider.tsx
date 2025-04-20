@@ -2,19 +2,22 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { axiosInstance } from "../lib/utils";
 import { useNavigate } from "react-router-dom";
-import { UseAuth } from "@/components/AuthProvider";
+import { UseAuth } from "@/provider/AuthProvider";
 
 const refreshAccessToken = async () => {
   try {
     axios.defaults.withCredentials = true;
-    await axios.post(`${import.meta.env.VITE_BASE_URL}/auth/refresh-token`);
+    const response = await axios.post(
+      `${import.meta.env.VITE_BASE_URL}/auth/refresh-token`
+    );
+    return response.data;
   } catch (error) {
     throw error;
   }
 };
 
 const AxiosProvider = ({ children }: { children: React.ReactNode }) => {
-  const { logout, login } = UseAuth();
+  const { isLoggedIn, logout, login } = UseAuth();
   const [isSet, setIsSet] = useState(false);
 
   const navigate = useNavigate();
@@ -27,8 +30,8 @@ const AxiosProvider = ({ children }: { children: React.ReactNode }) => {
         if (error.status === 401 && !originalRequest._retry) {
           originalRequest._retry = true;
           try {
-            await refreshAccessToken();
-            login();
+            const response = await refreshAccessToken();
+            if (!isLoggedIn) login(response.data.username);
             return axiosInstance(originalRequest);
           } catch (refreshError) {
             logout();
