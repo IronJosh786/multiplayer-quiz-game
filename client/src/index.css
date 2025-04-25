@@ -67,3 +67,7 @@
     @apply bg-background text-foreground font-sans;
   }
 }
+
+.pill {
+  @apply bg-indigo-900/40 border border-indigo-500/70;
+}

@@ -36,7 +36,7 @@ const Home = () => {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4 flex-1">
-            <div className="bg-slate-700 rounded-lg p-4">
+            <div className="bg-slate-700 rounded-md p-4">
               <P>As a room creator you can:</P>
               <ul className="space-y-2 mt-2">
                 <li className="flex items-center gap-2">
@@ -92,7 +92,7 @@ const Home = () => {
                 maxLength={6}
               />
             </div>
-            <Quote className="bg-slate-700 rounded-lg p-4 border-l-indigo-400">
+            <Quote className="bg-slate-700 rounded-md p-4 border-l-indigo-400">
               <Small>
                 Ask your quiz host for the unique 6-character room code to join
                 their quiz session.

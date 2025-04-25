@@ -6,7 +6,7 @@ interface AuthContextType {
   loading: boolean;
   isLoggedIn: boolean;
   logout: () => void;
-  login: (username: string) => void;
+  login: (id: string, username: string) => void;
   userData: {
     username: string;
   };
@@ -19,6 +19,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState({
+    id: "",
     username: "",
   });
 
@@ -27,11 +28,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const logout = () => {
     if (isLoggedIn) navigate("/", { replace: true });
     setIsLoggedIn(false);
-    setUserData({ username: "" });
+    setUserData({ id: "", username: "" });
   };
 
-  const login = (username: string) => {
-    setUserData({ username });
+  const login = (id: string, username: string) => {
+    setUserData({ id, username });
     setIsLoggedIn(true);
   };
 
@@ -39,7 +40,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setLoading(true);
     try {
       const response = await axiosInstance.get("/auth/check");
-      if (!isLoggedIn) login(response.data.data.username);
+      if (!isLoggedIn)
+        login(response.data.data.id, response.data.data.username);
     } catch (error) {
       logout();
     } finally {

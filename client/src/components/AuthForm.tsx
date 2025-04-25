@@ -77,7 +77,7 @@ export function AuthForm() {
       showErrorToast(error);
     },
     onSuccess: (data) => {
-      login(data.data.username);
+      login(data.data.id, data.data.username);
       toast.dismiss();
       const previousPath = location?.state?.from?.pathname || "/home";
       navigate(previousPath, { replace: true });

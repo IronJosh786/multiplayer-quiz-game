@@ -31,7 +31,7 @@ const AxiosProvider = ({ children }: { children: React.ReactNode }) => {
           originalRequest._retry = true;
           try {
             const response = await refreshAccessToken();
-            if (!isLoggedIn) login(response.data.username);
+            if (!isLoggedIn) login(response.data.id, response.data.username);
             return axiosInstance(originalRequest);
           } catch (refreshError) {
             logout();

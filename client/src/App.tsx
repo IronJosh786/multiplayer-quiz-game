@@ -1,4 +1,5 @@
 import Home from "./pages/Home";
+import QuizGame from "./pages/Game";
 import Landing from "./pages/Landing";
 import Layout from "./components/Layout";
 import NotFound from "./components/NotFound";
@@ -24,6 +25,7 @@ function App() {
                 <Route path="/" element={<Landing />}></Route>
                 <Route element={<PrivateRoute />}>
                   <Route path="/home" element={<Home />} />
+                  <Route path="/game/:id" element={<QuizGame />} />
                 </Route>
                 <Route path="*" element={<NotFound />} />
               </Route>
