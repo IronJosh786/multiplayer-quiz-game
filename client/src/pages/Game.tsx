@@ -13,6 +13,15 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Confetti from "react-confetti";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function QuizGame() {
   const [gameState, setGameState] = useState("waiting");
@@ -37,6 +46,9 @@ export default function QuizGame() {
   const [timeLeft, setTimeLeft] = useState(15);
   const [selectedOption, setSelectedOption] = useState(null);
   const quizTopicRef = useRef(null);
+  const [difficulty, setDifficulty] = useState<"Easy" | "Medium" | "Hard">(
+    "Easy"
+  );
 
   const mockQuestions = [
     {
@@ -118,6 +130,8 @@ export default function QuizGame() {
           users={users}
           currentUser={currentUser}
           quizTopicRef={quizTopicRef}
+          difficulty={difficulty}
+          setDifficulty={setDifficulty}
           fetchQuestions={fetchQuestions}
           startGame={startGame}
         />
@@ -142,7 +156,15 @@ export default function QuizGame() {
 }
 
 const WaitingRoom = memo(
-  ({ users, currentUser, quizTopicRef, fetchQuestions, startGame }) => {
+  ({
+    users,
+    currentUser,
+    quizTopicRef,
+    fetchQuestions,
+    startGame,
+    difficulty,
+    setDifficulty,
+  }) => {
     const copyRoomLink = () => {
       navigator.clipboard.writeText(window.location.href);
       showSuccessToast("Room link copied to clipboard successfully!");
@@ -176,6 +198,30 @@ const WaitingRoom = memo(
                 className="bg-slate-700 text-slate-300 border-none py-6"
                 placeholder="Enter quiz topic (e.g., Science, Movies, History)"
               />
+            </div>
+
+            <div className="p-5 pt-0">
+              <Select
+                value={difficulty}
+                onValueChange={(value) => setDifficulty(value)}
+              >
+                <SelectTrigger className="bg-slate-700 text-slate-300">
+                  <SelectValue placeholder="Select difficulty of the quiz" />
+                </SelectTrigger>
+                <SelectContent className="bg-slate-700 text-slate-300">
+                  <SelectGroup>
+                    <SelectLabel>Difficulty Level</SelectLabel>
+                    {["Easy", "Medium", "Hard"].map((level) => (
+                      <SelectItem
+                        className="hover:!bg-slate-800/80 focus:!bg-slate-800/80"
+                        value={level}
+                      >
+                        {level}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
             </div>
 
             <div className="p-5 pt-0 flex gap-2 flex-wrap">
