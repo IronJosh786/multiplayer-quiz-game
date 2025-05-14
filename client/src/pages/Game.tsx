@@ -156,6 +156,8 @@ export default function QuizGame() {
       } else if (data.type === "questions") {
         setGeneratingQuestions(false);
         if (!data.success) showErrorToast(data.message);
+        else if (!data.questionsAvailable)
+          showErrorToast("Could not generate the questions");
         else {
           setQuestionsAvailable(data.questionsAvailable);
           showSuccessToast(data.message);

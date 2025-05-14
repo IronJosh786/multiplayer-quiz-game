@@ -283,7 +283,7 @@ class Room {
       JSON.stringify({
         type: "leaderboards",
         success: true,
-        message: "quiz complete!",
+        message: "Quiz completed!",
         users: this.getRoomUsers(true).sort(
           (a, b) => (b.score ? b.score : 0) - (a.score ? a.score : 0)
         ),
