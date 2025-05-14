@@ -9,15 +9,31 @@ import {
 import { useState } from "react";
 import { Plus, Users } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { axiosInstance, showErrorToast } from "@/lib/utils";
 import { H1, P, Small, Quote } from "@/components/ui/typography";
 
 const Home = () => {
   const [roomCode, setRoomCode] = useState("");
+  const navigate = useNavigate();
 
-  const handleJoinRoom = () => {};
+  const handleJoinRoom = () => {
+    if (roomCode.trim().length !== 6) {
+      showErrorToast("Enter a valid 6 digit room code!");
+      return;
+    }
+    navigate(`/game/${roomCode}`);
+  };
 
-  const handleCreateRoom = () => {};
+  const handleCreateRoom = async () => {
+    try {
+      const response = await axiosInstance.post(`/room/create-room`);
+      navigate(`/game/${response.data.code}`);
+    } catch (error: any) {
+      showErrorToast(error.response.data.message);
+    }
+  };
 
   return (
     <div className="flex-1 flex flex-col justify-center items-center">

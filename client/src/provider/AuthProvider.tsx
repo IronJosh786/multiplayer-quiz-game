@@ -8,6 +8,7 @@ interface AuthContextType {
   logout: () => void;
   login: (id: string, username: string) => void;
   userData: {
+    id: string;
     username: string;
   };
   fetchAuthStatus: () => void;

@@ -1,15 +1,11 @@
 import { z } from "zod";
+import { User } from "..";
 import { db } from "../db";
 import bcrypt from "bcrypt";
 import { JwtPayload } from "jsonwebtoken";
 import { Request, Response } from "express";
 import { asyncHandler } from "../utils/async-handler";
 import { createTokens, verifyToken } from "../utils/jwt";
-
-type User = {
-  id: string;
-  username: string;
-};
 
 const authSchema = z.object({
   username: z
@@ -83,7 +79,7 @@ export const signUp = asyncHandler(async (req: Request, res: Response) => {
       .status(201)
       .json({ data: { username }, message: "Sign Up successful" });
   } catch (error) {
-    console.log("Error in signUp ", error);
+    console.error("Error in signUp ", error);
     return res
       .status(500)
       .json({ message: "Could not SignUp. Please try again!" });
@@ -124,7 +120,7 @@ export const signIn = asyncHandler(async (req: Request, res: Response) => {
       .status(200)
       .json({ data: { username }, message: "Sign In successful" });
   } catch (error) {
-    console.log("Error in signIn ", error);
+    console.error("Error in signIn ", error);
     return res
       .status(500)
       .json({ message: "Could not SignIn. Please try again!" });
@@ -176,7 +172,7 @@ export const refreshToken = asyncHandler(
         message: "Token refresh successful",
       });
     } catch (error) {
-      console.log("Error in refreshToken ", error);
+      console.error("Error in refreshToken ", error);
       return res.status(500).json({ message: "Could not Refresh Token." });
     }
   }
@@ -210,7 +206,7 @@ export const logout = asyncHandler(async (req: Request, res: Response) => {
 
     return res.status(200).json({ message: "Logout successful!" });
   } catch (error) {
-    console.log("Error in logout ", error);
+    console.error("Error in logout ", error);
     return res.status(500).json({ message: "Could not log out." });
   }
 });
