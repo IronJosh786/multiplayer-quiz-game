@@ -130,7 +130,7 @@ export default function QuizGame() {
 
   useEffect(() => {
     if (!userData?.username || socket) return;
-    const ws = new WebSocket("ws://localhost:3000");
+    const ws = new WebSocket(import.meta.env.VITE_WS_URL);
     setSocket(ws);
     ws.onopen = () => {
       ws.send(
