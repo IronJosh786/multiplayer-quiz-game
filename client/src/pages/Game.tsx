@@ -30,6 +30,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import Loader from "@/components/Loader";
 
 interface User {
   username: string;
@@ -49,6 +50,7 @@ type GameState = "waiting" | "quiz" | "result";
 
 export default function QuizGame() {
   const { id } = useParams();
+  const [loading, setLoading] = useState(true);
   const quizTopicRef = useRef<HTMLInputElement>(null);
   const [users, setUsers] = useState<User[] | []>([]);
   const [timeLeft, setTimeLeft] = useState<number>(20);
@@ -90,7 +92,7 @@ export default function QuizGame() {
 
   const startGame = () => {
     if (!questionsAvailable) {
-      showErrorToast("Generate questions before starting the quiz1");
+      showErrorToast("Generate questions before starting the quiz!");
       return;
     }
     socket?.send(
@@ -188,12 +190,16 @@ export default function QuizGame() {
       } else if (data.type === "timer") {
         setTimeLeft(data.time_left);
       } else if (data.type === "response") {
-        if (!data.success) showErrorToast(data.message);
-        else {
-          if (data.question_number === questionRef?.current?.question_number) {
-            setAnswer(data.correct_answer);
+        setTimeout(() => {
+          if (!data.success) showErrorToast(data.message);
+          else {
+            if (
+              data.question_number === questionRef?.current?.question_number
+            ) {
+              setAnswer(data.correct_answer);
+            }
           }
-        }
+        }, 100);
       } else if (data.type === "leaderboards") {
         setUsers(data.users);
         setGameState("result");
@@ -216,7 +222,8 @@ export default function QuizGame() {
           setTimeLeft(data.time_left);
           setAnswer(data.has_responded ? data.correct_answer : null);
           setSelectedOption(data.has_responded ? data.user_answer : null);
-        } else setUsers(data.users);
+        } else if (data.state === "result") setUsers(data.users);
+        setLoading(false);
       }
     };
     ws.onerror = (e) => {
@@ -243,6 +250,7 @@ export default function QuizGame() {
           startGame={startGame}
           questionsAvailable={questionsAvailable}
           generatingQuestions={generatingQuestions}
+          loading={loading}
         />
       )}
 
@@ -254,6 +262,7 @@ export default function QuizGame() {
           selectedOption={selectedOption}
           handleOptionSelect={handleOptionSelect}
           questionNumber={question?.question_number}
+          loading={loading}
         />
       )}
 
@@ -262,6 +271,7 @@ export default function QuizGame() {
           currentUser={currentUser}
           users={users}
           resetGame={resetGame}
+          loading={loading}
         />
       )}
     </div>
@@ -279,6 +289,7 @@ const WaitingRoom = ({
   setDifficulty,
   questionsAvailable,
   generatingQuestions,
+  loading,
 }: {
   users: User[];
   roomCode: string | undefined;
@@ -290,12 +301,15 @@ const WaitingRoom = ({
   setDifficulty: React.Dispatch<React.SetStateAction<Difficulty>>;
   questionsAvailable: boolean;
   generatingQuestions: boolean;
+  loading: boolean;
 }) => {
   const copyRoomCode = () => {
     if (!roomCode) return;
     navigator.clipboard.writeText(roomCode);
     showSuccessToast("Room code copied to clipboard successfully!");
   };
+
+  if (loading) return <Loader />;
 
   return (
     <div className="flex-1 flex flex-col gap-4 justify-center items-center max-w-4xl mx-auto w-full px-4 py-8">
@@ -446,6 +460,7 @@ function QuizStage({
   selectedOption,
   handleOptionSelect,
   questionNumber,
+  loading,
 }: {
   question: Question | null;
   answer: string | null;
@@ -453,28 +468,32 @@ function QuizStage({
   selectedOption: string | null;
   handleOptionSelect: (key: string) => void;
   questionNumber: number | undefined;
+  loading: boolean;
 }) {
+  if (loading) return <Loader />;
   return (
     <div className="bg-slate-800/80 rounded-xl border border-slate-700 shadow-lg w-full">
-      <div className="p-5 gap-4 border-b border-slate-700 flex justify-between items-center">
-        <div className="flex flex-col gap-2">
+      <div className="p-5 border-b border-slate-700 w-full">
+        <div className="flex justify-between items-center mb-2">
           <Small className="text-muted-foreground">
             Question {questionNumber}/10
           </Small>
-          <H4>{question?.text}</H4>
-        </div>
-        <div
-          className={`flex items-center gap-2 font-bold ${
-            timeLeft <= 5 ? "text-red-400" : "text-yellow-400"
-          }`}
-        >
-          <Clock3 size={16} />
-          <P
-            className={`${timeLeft <= 5 ? "text-red-400" : "text-yellow-400"}`}
+          <div
+            className={`flex items-center gap-2 font-bold ${
+              timeLeft <= 5 ? "text-red-400" : "text-yellow-400"
+            }`}
           >
-            {timeLeft}s
-          </P>
+            <Clock3 size={16} />
+            <P
+              className={`${
+                timeLeft <= 5 ? "text-red-400" : "text-yellow-400"
+              }`}
+            >
+              {timeLeft}s
+            </P>
+          </div>
         </div>
+        <H4>{question?.text}</H4>
       </div>
 
       <div className="p-5">
@@ -484,12 +503,16 @@ function QuizStage({
               <button
                 key={index}
                 className={`flex gap-1 items-center p-3 rounded-lg text-left transition border ${
-                  selectedOption === key
-                    ? selectedOption === answer
+                  answer != null
+                    ? selectedOption === key
+                      ? selectedOption === answer
+                        ? "bg-green-600/30 border-green-500"
+                        : "bg-red-600/30 border-red-500"
+                      : key === answer && selectedOption
                       ? "bg-green-600/30 border-green-500"
-                      : "bg-red-600/30 border-red-500"
-                    : key === answer && selectedOption
-                    ? "bg-green-600/30 border-green-500"
+                      : "bg-slate-700 hover:bg-slate-700/80 border-slate-500 hover:border-slate-500/80"
+                    : selectedOption === key
+                    ? "bg-indigo-900/40 border-indigo-500/70"
                     : "bg-slate-700 hover:bg-slate-700/80 border-slate-500 hover:border-slate-500/80"
                 }`}
                 onClick={() => handleOptionSelect(key)}
@@ -511,11 +534,14 @@ function ResultStage({
   currentUser,
   users,
   resetGame,
+  loading,
 }: {
   currentUser: User | null;
   users: User[];
   resetGame: () => void;
+  loading: boolean;
 }) {
+  if (loading) <Loader />;
   return (
     <div className="overflow-hidden flex-1 flex flex-col gap-8 justify-center items-center max-w-4xl mx-auto w-full px-4 py-8">
       {users[0].username === currentUser?.username && (

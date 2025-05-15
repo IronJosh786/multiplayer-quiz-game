@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /home
+Disallow: /game/
+
+Allow: /
+
+# Point to sitemap
+Sitemap: https://quiz.faizanejaz.com/sitemap.xml

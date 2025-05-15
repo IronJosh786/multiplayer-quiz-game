@@ -92,8 +92,7 @@ class Room {
     if (this.current_state !== "result")
       this.broadcastEventToEveryone(responseString);
 
-    if (this.current_state !== "waiting")
-      this.broadcastCurrentStateDetails(user);
+    this.broadcastCurrentStateDetails(user);
 
     return true;
   }
@@ -194,8 +193,15 @@ class Room {
 
   broadcastCurrentStateDetails(user: RoomUser) {
     const state = this.current_state;
-    if (state === "waiting") return;
-    if (state === "quiz") {
+    if (state === "waiting") {
+      user.ws.send(
+        JSON.stringify({
+          type: "current-quiz-details",
+          success: true,
+          state: "waiting",
+        })
+      );
+    } else if (state === "quiz") {
       const question = this.questions[this.current_question_index];
       const user_response = this.responses.get(
         `${user.username}-${question.question_number}`
