@@ -115,7 +115,7 @@ const handleClose = (user: User, ws: WebSocket) => {
   if (isUserInAGame) {
     users.delete(user.username);
     const room = rooms.get(isUserInAGame);
-    room?.removeUser(user.username);
+    room?.removeUser(user.username, ws);
   }
 };
 

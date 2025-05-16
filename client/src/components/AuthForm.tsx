@@ -131,7 +131,7 @@ export function AuthForm() {
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input placeholder="Abc@123" {...field} />
+                      <Input type="password" placeholder="Abc@123" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

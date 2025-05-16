@@ -97,8 +97,10 @@ class Room {
     return true;
   }
 
-  removeUser(username: string) {
-    this.users.delete(username);
+  removeUser(username: string, ws: WebSocket) {
+    const user = this.users.get(username);
+    if (user && user.ws === ws) this.users.delete(username);
+    else return;
 
     const roomUsers = this.getRoomUsers();
 
@@ -240,7 +242,6 @@ class Room {
         })
       );
     }
-    return;
   }
 
   addResponse(username: string, question_number: number, answer: string) {
