@@ -24,12 +24,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { Clock3, Users, Plus, LucideClipboardList } from "lucide-react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { UseAuth } from "@/provider/AuthProvider";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import Loader from "@/components/Loader";
 
 interface User {
@@ -358,6 +352,7 @@ const WaitingRoom = ({
                     <SelectItem
                       className="hover:!bg-slate-800/80 focus:!bg-slate-800/80"
                       value={level}
+                      key={level}
                     >
                       {level}
                     </SelectItem>
@@ -368,27 +363,18 @@ const WaitingRoom = ({
           </div>
 
           <div className="p-5 pt-0 flex gap-2 flex-wrap">
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <span className="flex-1">
-                    <Button
-                      onClick={fetchQuestions}
-                      variant="secondary"
-                      className="w-full"
-                      disabled={questionsAvailable || generatingQuestions}
-                    >
-                      Generate Questions
-                    </Button>
-                  </span>
-                </TooltipTrigger>
-                <TooltipContent side="top">
-                  {questionsAvailable
-                    ? "Questions generated"
-                    : "Generate questions"}
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+            <Button
+              onClick={fetchQuestions}
+              variant="secondary"
+              className="flex-1"
+              disabled={questionsAvailable || generatingQuestions}
+            >
+              {questionsAvailable
+                ? "Questions Generated"
+                : generatingQuestions
+                ? "Generating Questions"
+                : "Generate Questions"}
+            </Button>
             <Button onClick={startGame} className="flex-1">
               Start Quiz
             </Button>
@@ -483,17 +469,17 @@ function QuizStage({
               timeLeft <= 5 ? "text-red-400" : "text-yellow-400"
             }`}
           >
-            <Clock3 size={16} />
-            <P
+            <Clock3 size={14} />
+            <Small
               className={`${
                 timeLeft <= 5 ? "text-red-400" : "text-yellow-400"
               }`}
             >
               {timeLeft}s
-            </P>
+            </Small>
           </div>
         </div>
-        <H4>{question?.text}</H4>
+        <H4 className="text-lg">{question?.text}</H4>
       </div>
 
       <div className="p-5">
@@ -560,7 +546,7 @@ function ResultStage({
       )}
       <H1 className="text-center">Leaderboard</H1>
       {/* Leaderboard */}
-      <Table>
+      <Table className="my-8">
         <TableHeader>
           <TableRow>
             <TableHead>

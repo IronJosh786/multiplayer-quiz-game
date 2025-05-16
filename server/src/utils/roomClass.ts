@@ -99,15 +99,15 @@ class Room {
 
   removeUser(username: string, ws: WebSocket) {
     const user = this.users.get(username);
-    if (user && user.ws === ws) this.users.delete(username);
-    else return;
-
+    if (user && user.ws === ws) {
+      this.users.delete(username);
+    } else return false;
     const roomUsers = this.getRoomUsers();
 
     if (roomUsers.length === 0)
       this.timeout_id = this.createRoomDeletionTimeout();
 
-    if (this.current_state === "result") return;
+    if (this.current_state === "result") return true;
 
     const responseString = JSON.stringify({
       success: true,
@@ -117,6 +117,7 @@ class Room {
     });
 
     this.broadcastEventToEveryone(responseString);
+    return true;
   }
 
   setQuestions(questions: Question[], username: string) {

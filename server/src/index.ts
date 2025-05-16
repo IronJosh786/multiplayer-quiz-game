@@ -113,30 +113,38 @@ const handleMessage = (user: User, ws: WebSocket, message: string) => {
 const handleClose = (user: User, ws: WebSocket) => {
   const isUserInAGame = users.get(user.username);
   if (isUserInAGame) {
-    users.delete(user.username);
     const room = rooms.get(isUserInAGame);
-    room?.removeUser(user.username, ws);
+    const removed = room?.removeUser(user.username, ws);
+    if (removed) users.delete(user.username);
   }
 };
 
 const handleJoinRoom = (user: User, ws: WebSocket, room_id: string) => {
   const room = rooms.get(room_id);
-  if (!room) {
+  const isUserInAGame = users.get(user.username);
+  let message: string = "";
+
+  if (!room)
+    message = "Could not find the room, please join or create another room!";
+  else if (isUserInAGame) message = "You are already in another room!";
+
+  if (message) {
     const response = {
       success: false,
       type: "joined",
-      message: "Could not find the room, please join or create another room!",
+      message,
     };
     broadcastEventToSingleUser(response, ws);
     return;
   }
+
   const newUser = {
     username: user.username,
     score: 0,
     ws,
-    is_admin: user.username === room.admin_username,
+    is_admin: user.username === room!.admin_username,
   };
-  const joined = room.addUser(newUser);
+  const joined = room!.addUser(newUser);
   if (joined) users.set(user.username, room_id);
   return;
 };
