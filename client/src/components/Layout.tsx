@@ -10,7 +10,7 @@ import {
 import { Skeleton } from "./ui/skeleton";
 import { BrainCircuit, User } from "lucide-react";
 import { UseAuth } from "@/provider/AuthProvider";
-import { Large, Muted, P, Small } from "./ui/typography";
+import { Large, Muted, Small } from "./ui/typography";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { axiosInstance, showErrorToast, showSuccessToast } from "@/lib/utils";
 
