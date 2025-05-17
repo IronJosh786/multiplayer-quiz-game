@@ -41,7 +41,7 @@ const Home = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 mt-6">
         {/* Create Room Card */}
-        <Card className="bg-slate-800 shadow-lg flex flex-col">
+        <Card className="bg-slate-800/80 border-slate-700 shadow-lg flex flex-col">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Plus className="h-5 w-5 text-indigo-400" />
@@ -84,7 +84,7 @@ const Home = () => {
         </Card>
 
         {/* Join Room Card */}
-        <Card className="bg-slate-800 shadow-lg flex flex-col">
+        <Card className="bg-slate-800/80 border-slate-700 shadow-lg flex flex-col">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Users className="h-5 w-5 text-indigo-400" />

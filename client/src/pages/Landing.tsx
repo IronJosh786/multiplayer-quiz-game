@@ -42,7 +42,7 @@ const Landing = () => {
       <div className="mx-auto mt-12">
         <H3 className="text-center">Why Choose QuizMaster?</H3>
         <div className="grid md:grid-cols-3 gap-2 mt-4">
-          <div className="flex flex-col gap-1 bg-slate-800 rounded-lg p-6 text-center">
+          <div className="flex flex-col gap-1 bg-slate-800/80 border border-slate-700 rounded-lg p-6 text-center">
             <div className="flex justify-center">
               <Users className="h-10 w-10 text-indigo-400" />
             </div>
@@ -52,7 +52,7 @@ const Landing = () => {
               unlimited participants.
             </P>
           </div>
-          <div className="flex flex-col gap-1 bg-slate-800 rounded-lg p-6 text-center">
+          <div className="flex flex-col gap-1 bg-slate-800/80 border border-slate-700 rounded-lg p-6 text-center">
             <div className="flex justify-center">
               <BrainCircuit className="h-10 w-10 text-indigo-400" />
             </div>
@@ -62,7 +62,7 @@ const Landing = () => {
               jump right in.
             </P>
           </div>
-          <div className="flex flex-col gap-1 bg-slate-800 rounded-lg p-6 text-center">
+          <div className="flex flex-col gap-1 bg-slate-800/80 border border-slate-700 rounded-lg p-6 text-center">
             <div className="flex justify-center">
               <Crown className="h-10 w-10 text-indigo-400" />
             </div>

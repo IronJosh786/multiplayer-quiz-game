@@ -49,7 +49,7 @@ export const P = createComponent<HTMLParagraphElement>(
 
 export const Lead = createComponent<HTMLParagraphElement>(
   "p",
-  "text-xl text-muted-foreground",
+  "text-xl",
   "Lead"
 );
 

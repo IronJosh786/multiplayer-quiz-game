@@ -306,7 +306,7 @@ const WaitingRoom = ({
   if (loading) return <Loader />;
 
   return (
-    <div className="flex-1 flex flex-col gap-4 justify-center items-center max-w-4xl mx-auto w-full px-4 py-8">
+    <div className="flex-1 flex flex-col gap-4 justify-center items-center max-w-4xl mx-auto w-full py-8">
       <H1 className="text-center">Waiting Room</H1>
 
       <div className="flex gap-2 items-center pill px-4 py-1.5 rounded-md">

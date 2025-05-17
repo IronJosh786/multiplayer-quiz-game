@@ -51,7 +51,11 @@ const Layout = () => {
             {loading && <Skeleton className="h-8 w-12" />}
 
             {!loading && !isLoggedIn && (
-              <Button onClick={() => navigate("/signin")} variant={"outline"}>
+              <Button
+                onClick={() => navigate("/signin")}
+                variant={"outline"}
+                className="border-slate-700"
+              >
                 Login
               </Button>
             )}
@@ -59,20 +63,23 @@ const Layout = () => {
             {!loading && isLoggedIn && (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="outline">
+                  <Button variant="outline" className="border-slate-700">
                     <User />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56" align="end">
+                <DropdownMenuContent
+                  className="w-56 bg-slate-700 text-slate-300"
+                  align="end"
+                >
                   <DropdownMenuLabel>
                     <Muted>{userData.username}</Muted>
                   </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
+                  <DropdownMenuSeparator className="bg-[#CBD5E1] opacity-50" />
                   <DropdownMenuItem
                     onClick={handleLogout}
-                    className="flex gap-2 items-center"
+                    className="flex gap-2 items-center hover:!bg-slate-800/80"
                   >
-                    <P className="flex gap-2 items-center">Log out</P>
+                    Log out
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

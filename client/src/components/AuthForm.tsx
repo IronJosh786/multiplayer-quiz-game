@@ -87,8 +87,8 @@ export function AuthForm() {
 
   return (
     <div className="flex-1 flex justify-center items-center px-4">
-      <Card className="mx-auto w-96">
-        <CardHeader>
+      <Card className="mx-auto w-96 bg-slate-800/80 border border-slate-700">
+        <CardHeader className="border-b border-slate-700">
           <CardTitle>
             <Lead>{page === "signin" ? "Sign In" : "Sign Up"}</Lead>
           </CardTitle>
@@ -98,7 +98,7 @@ export function AuthForm() {
               : "Fill up the form to create a new account"}
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="pt-6">
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(handleAuthentication)}
@@ -118,6 +118,7 @@ export function AuthForm() {
                           field.onChange(e.target.value.toLowerCase())
                         }
                         value={field.value}
+                        className="bg-slate-700"
                       />
                     </FormControl>
                     <FormMessage />
@@ -131,7 +132,12 @@ export function AuthForm() {
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input type="password" placeholder="Abc@123" {...field} />
+                      <Input
+                        type="password"
+                        placeholder="Abc@123"
+                        {...field}
+                        className="bg-slate-700"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
