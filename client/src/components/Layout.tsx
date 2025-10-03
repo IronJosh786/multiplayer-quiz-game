@@ -43,12 +43,12 @@ const Layout = () => {
       >
         <div className="flex items-center space-x-2">
           <BrainCircuit className="h-8 w-8 text-indigo-400" />
-          <Large className="font-bold">QuizMaster</Large>
+          <Large className="font-bold hidden xs:block">QuizMaster</Large>
         </div>
 
         {isNotAnAuthPage && (
           <div>
-            {loading && <Skeleton className="h-8 w-12" />}
+            {loading && <Skeleton className="h-9 w-[69.5px]" />}
 
             {!loading && !isLoggedIn && (
               <Button

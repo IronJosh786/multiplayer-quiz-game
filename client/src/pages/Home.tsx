@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { axiosInstance, showErrorToast } from "@/lib/utils";
-import { H1, P, Small, Quote } from "@/components/ui/typography";
+import { H2, P, Small, Quote } from "@/components/ui/typography";
 
 const Home = () => {
   const [roomCode, setRoomCode] = useState("");
@@ -37,7 +37,7 @@ const Home = () => {
 
   return (
     <div className="flex-1 flex flex-col justify-center items-center">
-      <H1 className="text-center">Ready to Quiz?</H1>
+      <H2 className="text-center">Ready to Quiz?</H2>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 mt-6">
         {/* Create Room Card */}

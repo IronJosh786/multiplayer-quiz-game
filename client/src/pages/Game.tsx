@@ -19,7 +19,7 @@ import Confetti from "react-confetti";
 import { Input } from "@/components/ui/input";
 import { showErrorToast, showSuccessToast } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { H1, H4, Muted, P, Small } from "@/components/ui/typography";
+import { H2, H4, Muted, P, Small } from "@/components/ui/typography";
 import React, { useState, useEffect, useRef } from "react";
 import { Clock3, Users, Plus, LucideClipboardList } from "lucide-react";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -307,7 +307,7 @@ const WaitingRoom = ({
 
   return (
     <div className="flex-1 flex flex-col gap-4 justify-center items-center max-w-4xl mx-auto w-full py-8">
-      <H1 className="text-center">Waiting Room</H1>
+      <H2 className="text-center">Waiting Room</H2>
 
       <div className="flex gap-2 items-center pill px-4 py-1.5 rounded-md">
         <Muted>Copy Room Code </Muted>
@@ -372,8 +372,8 @@ const WaitingRoom = ({
               {questionsAvailable
                 ? "Questions Generated"
                 : generatingQuestions
-                ? "Generating Questions"
-                : "Generate Questions"}
+                  ? "Generating Questions"
+                  : "Generate Questions"}
             </Button>
             <Button onClick={startGame} className="flex-1">
               Start Quiz
@@ -495,11 +495,11 @@ function QuizStage({
                         ? "bg-green-600/30 border-green-500"
                         : "bg-red-600/30 border-red-500"
                       : key === answer && selectedOption
-                      ? "bg-green-600/30 border-green-500"
-                      : "bg-slate-700 hover:bg-slate-700/80 border-slate-500 hover:border-slate-500/80"
+                        ? "bg-green-600/30 border-green-500"
+                        : "bg-slate-700 hover:bg-slate-700/80 border-slate-500 hover:border-slate-500/80"
                     : selectedOption === key
-                    ? "bg-indigo-900/40 border-indigo-500/70"
-                    : "bg-slate-700 hover:bg-slate-700/80 border-slate-500 hover:border-slate-500/80"
+                      ? "bg-indigo-900/40 border-indigo-500/70"
+                      : "bg-slate-700 hover:bg-slate-700/80 border-slate-500 hover:border-slate-500/80"
                 }`}
                 onClick={() => handleOptionSelect(key)}
                 disabled={selectedOption !== null}
@@ -544,7 +544,7 @@ function ResultStage({
           recycle={false}
         />
       )}
-      <H1 className="text-center">Leaderboard</H1>
+      <H2 className="text-center">Leaderboard</H2>
       {/* Leaderboard */}
       <Table className="my-8">
         <TableHeader>

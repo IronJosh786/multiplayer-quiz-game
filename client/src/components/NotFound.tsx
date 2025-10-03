@@ -1,5 +1,5 @@
 import { Button } from "./ui/button";
-import { H4, P } from "./ui/typography";
+import { H1, P } from "./ui/typography";
 import { useNavigate } from "react-router-dom";
 
 const NotFound = () => {
@@ -7,11 +7,11 @@ const NotFound = () => {
 
   return (
     <div className="flex-1 flex flex-col justify-center items-center">
-      <H4 className="text-5xl">404</H4>
-      <P className="text-center">
+      <H1>404</H1>
+      <P className="text-center mt-2">
         Looks like you've ventured into the unknown digital realm.
       </P>
-      <div className="mt-6">
+      <div className="mt-4">
         <Button
           onClick={() =>
             window.history.length > 2 ? navigate(-1) : navigate("/home")

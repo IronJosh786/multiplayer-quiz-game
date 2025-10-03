@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { UseAuth } from "@/provider/AuthProvider";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Users, BrainCircuit, Crown } from "lucide-react";
-import { H1, H3, H4, P } from "@/components/ui/typography";
+import { H2, H3, H4, P } from "@/components/ui/typography";
 
 const Landing = () => {
   const { isLoggedIn, loading } = UseAuth();
@@ -19,13 +19,13 @@ const Landing = () => {
     <div className="flex-1 flex flex-col justify-center items-center">
       {/* Hero Section */}
       <div className="flex flex-col items-center gap-6">
-        <H1 className="text-center">Compete in real-time quiz competitions</H1>
+        <H2 className="text-center">Compete in real-time quiz competitions</H2>
         <P className="text-center">
           Challenge friends, colleagues, or students with interactive quizzes by
           creating custom rooms or joining existing ones with a simple code.
         </P>
         <div>
-          {loading && <Skeleton className="h-12 w-[135px] self-start" />}
+          {loading && <Skeleton className="h-12 w-[163.28px] self-start" />}
           {!loading && (
             <Button
               onClick={handleLogin}

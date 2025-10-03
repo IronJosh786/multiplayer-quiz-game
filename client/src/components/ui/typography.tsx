@@ -25,19 +25,19 @@ export const H1 = createComponent<HTMLHeadingElement>(
 
 export const H2 = createComponent<HTMLHeadingElement>(
   "h2",
-  "scroll-m-20 text-3xl font-semibold tracking-tight first:mt-0",
+  "scroll-m-20 text-3xl font-extrabold tracking-tight lg:text-4xl first:mt-0",
   "H2"
 );
 
 export const H3 = createComponent<HTMLHeadingElement>(
   "h3",
-  "scroll-m-20 text-2xl font-semibold tracking-tight",
+  "scroll-m-20 text-2xl font-bold tracking-tight",
   "H3"
 );
 
 export const H4 = createComponent<HTMLHeadingElement>(
   "h4",
-  "scroll-m-20 text-xl font-semibold tracking-tight",
+  "scroll-m-20 text-xl font-bold tracking-tight",
   "H4"
 );
 
